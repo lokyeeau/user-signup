@@ -10,80 +10,67 @@ app.config['DEBUG'] = True
 
 
 @app.route("/", methods=['POST'])
-def validate_name():
+def validate():
+    error = False
     name = request.form['username']
+    password = request.form['password']
+    password_ver = request.form['password_ver']
+    email = request.form['email']
 
-    name_error = ''
+    name_error = ''    
+    password_error = ''
+    password_ver_error = ''
+    email_error = ''
 
     if len(name) < 3 or len(name) > 20:
         name_error = "Your username must be between 3-20 characters"
-        name = ''
+        error = True
 
-    for char in name:
-        if char == " ":
-            name_error = "Your username cannot contain any spaces"
-            name = ''
+    if " " in name:
+        name_error = "Your username cannot contain any spaces"
+        error = True
 
-    if name_error:
-        return render_template('signup.html', name_error = name_error)
-
-    if not name_error:
-        return render_template('signup_confirm.html', username=name)
-
-
-def validate_password():
-    password = request.form['password']
-    password_ver = request.form['password_ver']
-
-    password_error = ''
-    password_ver_error = ''
-
+    if error:
+        return render_template('signup.html', error=error, name_error = name_error)
+    
     if len(password) < 3 or len(password) > 20:
         password_error = "Your password must be between 3-20 characters"
+        error = True
 
     if password != password_ver:
         password_ver_error = "Passwords do not match"
+        error = True
 
-    for char in password:
-        if char == " ":
-            password_error = "Password cannot contain any spaces"
+    if " " in password:
+        password_error = "Password cannot contain any spaces"
+        error = True
 
     if password_error or password_ver_error:
-        return render_template('signup.html', password_error=password_error, password_ver_error = password_ver_error)
-
-def validate_email():
-    email = request.form['email']
-
-    email_error = ''
-
-    def is_email(email):
-        for char in email:
-            if char == "@":
-                if char == ".":
-                    return True
-            else:
-                return False
-
-    if len(email) < 3 or len(email) > 20:
-        email_error = "Invalid email address"
-        email = ''
-
-    for char in email:
-        if char == ' ':
+        error = True
+        return render_template('signup.html', error = error, password_error=password_error, password_ver_error = password_ver_error, username=name)
+    
+    if len(email) > 0:
+        if "@" not in email and "." not in email:
             email_error = "Invalid email address"
-            email = ''
+            error = True
+            return render_template('signup.html', error=error, email_error = email_error, username=name)
 
-    if not is_email(email):
+    if len(email) > 20:
         email_error = "Invalid email address"
-        email = ''
+        error = True
+        return render_template('signup.html', error=error, email_error=email_error, username=name)
+    
+    if " " in email:
+        email_error = "Invalid email address"
+        error = True
+        return render_template('signup.html', error=error, email_error=email_error, username=name)
 
-    if email_error:
-        return render_template('signup.html', email_error=email_error)
+    return render_template('signup_confirm.html', username=name)
 
-@app.route('/welcome', methods=['POST','GET'])
-def welcome():
-    username = request.args.get('username')
-    return render_template('signup_confirm.html', username=username)
+# @app.route('/welcome', methods=['GET', 'POST'])
+# def welcome():
+#     username = request.form['username']
+#     return render_template('signup_confirm.html', username=username)
 
 @app.route("/", methods=['POST', 'GET'])
 def index():

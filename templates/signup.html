@@ -3,39 +3,64 @@
 {% block content %}
 
 <form action="/" method="post">
-    <label>
-        Username
-        <input type="text" name="username" value='{{username}}'/>
-        {% if error %}
-            <p class="error">{{name_error}}</p>
-        {% endif %}
-    </label>
-    <br>
-    <label>
-        Password
-        <input type="password" name="password" value='{{password}}'/>
-        {% if error %}
-            <p class="error">{{password_error}}</p>
-        {% endif %}
-    </label>
-    <br>
-    <label>
-        Verify Password
-        <input type="password" name="password_ver" value='{{password_ver}}'/>
-        {% if error %}
-            <p class="error">{{password_ver_error}}</p>
-        {% endif %}
-    </label>
-    <br>
-    <label>
-        Email (Optional)
-        <input type="text" name="email" value='{{email}}'/>
-        {% if error %}
-            <p class="error">{{email_error}}</p>
-        {% endif %}
-    </label>
-    <br>
-    <input type="submit" value="Submit"/>
+    <table>
+        <tr>
+            <td>
+                <label for = "username">Username
+            </td>
+            <td>
+                <input type="text" name="username" value='{{username}}'/></label>
+            </td>
+            <td>
+                {% if error %}
+                    <p class="error">{{name_error}}</p>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for = "password">Password</label>
+            </td>
+            <td>
+                <input type="password" name="password"/>
+            </td>
+            <td>
+                {% if error %}
+                    <p class="error">{{password_error}}</p>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for = "password_ver">Verify Password</label>
+            </td>
+            <td>
+                <input type="password" name="password_ver"/>
+            </td>
+            <td>
+                {% if error %}
+                    <p class="error">{{password_ver_error}}</p>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for = "email">Email (Optional)</label>
+            </td>
+            <td>
+                <input type="text" name="email" value='{{email}}'/>
+            </td>
+            <td>
+                {% if error %}
+                    <p class="error">{{email_error}}</p>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="submit" value="Submit"/>
+            </td>
+        </tr>
 </form>
 
 {% endblock %}
